@@ -3,9 +3,12 @@ const Todo = require('./src/model/Todo');
 const sequelize = require('./src/utils/db');
 
 const app = express();
+const cors = require('cors');
 const PORT = 3300;
 
 app.use(express.json());
+app.use(cors());
+
 
 // Get all todos
 app.get('/todos', async (req, res) => {
@@ -20,11 +23,15 @@ app.get('/todos', async (req, res) => {
 
 // Create a new todo
 app.post('/todos', async (req, res) => {
+
   const { title } = req.body;
+  console.log("*** title *** "+JSON.stringify(title));
 
   try {
+   
     const todo = await Todo.create({ title });
     res.status(201).json(todo);
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
@@ -82,7 +89,7 @@ sequelize
   .sync( {force : true} )
   .then(async () => {
 
-    const count = await Todo.count();
+    const count = await Todo.count(); 
     if (count === 0) {
       await Todo.bulkCreate(sampleTodos);
       console.log('Sample todos added successfully');
