@@ -7,7 +7,12 @@ const cors = require('cors');
 const PORT = 3300;
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ 
+    methods: [
+      'GET', 'POST', 'PUT', 'PATCH', 'DELETE'
+    ], 
+  }));
+
 
 
 // Get all todos
@@ -38,9 +43,11 @@ app.post('/todos', async (req, res) => {
   }
 });
 
-// Toggle todo completion status
+//Toggle todo completion status
+
 app.patch('/todos/:id', async (req, res) => {
   const { id } = req.params;
+  console.log("in patch method "+id)
 
   try {
     const todo = await Todo.findByPk(id);
@@ -76,7 +83,7 @@ app.delete('/todos/:id', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
-  }
+  } 
 });
 
 const sampleTodos = [ 
