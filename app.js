@@ -93,10 +93,11 @@ const sampleTodos = [
 ];
 
 sequelize
-  .sync( {force : true} )
+  .sync( {force : false} )
   .then(async () => {
-
+    
     const count = await Todo.count(); 
+    console.log("count "+count);
     if (count === 0) {
       await Todo.bulkCreate(sampleTodos);
       console.log('Sample todos added successfully');
